@@ -2,7 +2,7 @@
   "name": "حاسبة زيت الزيتون",
   "short_name": "حاسبة الزيت",
   "description": "تطبيق لحساب أوزان وأسعار زيت الزيتون بدقة",
-  "start_url": "index.html",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#FEF9F2",
   "theme_color": "#606c38",
