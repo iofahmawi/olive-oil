@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة زيت الزيتون</title>
+    
+    <meta name="theme-color" content="#606c38">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-1024.png">
+    <link rel="manifest" href="manifest.json">
+
     <style>
         :root {
             --olive-dark: #3e4a11;
@@ -183,6 +190,13 @@
 </div>
 
 <script>
+    // تسجيل الـ Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+        });
+    }
+
     function calculate() {
         const pVal = document.getElementById('totalPrice').value;
         const lVal = document.getElementById('liters').value;
