@@ -1,4 +1,4 @@
-const cacheName = 'olive-calc-v4';
+const cacheName = 'olive-calc-v5';
 const assets = [
   './',
   'index.html',
@@ -21,4 +21,5 @@ self.addEventListener('fetch', e => {
     })
   );
 });
+
 
