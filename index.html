@@ -33,7 +33,6 @@
             margin: 0;
             color: var(--olive-dark);
             overflow: hidden;
-            /* تجعل الصفحة كاملة قابلة للنقر لإغلاق الكيبورد */
             cursor: pointer;
         }
 
@@ -41,10 +40,11 @@
             background: var(--white);
             padding: 1.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            /* التعديل هنا: ظل خفيف جداً وغير متعب للعين */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             width: 85%;
             max-width: 310px;
-            border: 1px solid rgba(62, 74, 17, 0.1);
+            border: 1px solid rgba(62, 74, 17, 0.08);
             cursor: default;
         }
 
@@ -195,11 +195,10 @@
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.worker.register('sw.js');
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
         });
     }
 
-    // إغلاق الكيبورد عند الضغط على Enter/تم
     document.getElementById('liters').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             this.blur();
@@ -212,7 +211,6 @@
         }
     });
 
-    // وظيفة إغلاق الكيبورد عند لمس أي مكان خارج الحقول
     function closeKeyboard(event) {
         if (event.target.tagName !== 'INPUT') {
             document.activeElement.blur();
