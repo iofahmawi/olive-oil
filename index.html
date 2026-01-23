@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة زيت الزيتون</title>
-    
+
     <meta name="theme-color" content="#606c38">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -144,7 +144,7 @@
 
 <div class="container">
     <h2>🌿 حاسبة زيت الزيتون</h2>
-    
+
     <div class="input-group">
         <label>سعر العبوة:</label>
         <input type="number" id="totalPrice" oninput="calculate()">
@@ -160,7 +160,7 @@
             <span class="label-text">إجمالي الكيلوات:</span>
             <span class="value" id="totalKg">0.00</span>
         </div>
-        
+
         <div class="divider"></div>
 
         <div class="result-item">
@@ -171,9 +171,9 @@
             <span class="label-text">سعر الكيلو:</span>
             <span class="value" id="pricePerKg">0.00</span>
         </div>
-        
+
         <div class="divider"></div>
-        
+
         <div class="result-item">
             <span class="label-text">سعر التنكة 16 كغم:</span>
             <span class="value highlight-value" id="tanakaPrice">0.00</span>
@@ -181,7 +181,7 @@
     </div>
 
     <div class="footer">
-        كثافة الزيت المعتمدة 0.916
+    كثافة الزيت المعتمدة 0.916 كجم/لتر
     </div>
 </div>
 
@@ -200,7 +200,7 @@
     function calculate() {
         const pVal = document.getElementById('totalPrice').value;
         const lVal = document.getElementById('liters').value;
-        
+
         const price = parseFloat(pVal);
         const ltr = parseFloat(lVal);
         const density = 0.916;
