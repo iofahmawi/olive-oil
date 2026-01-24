@@ -21,12 +21,13 @@
             --dev-text: #333333;
         }
 
-        /* منع التمرير والارتداد لجعل الأداة ثابتة كلياً */
+        /* منع التمرير وإلغاء وميض الضغط */
         html, body {
             height: 100%;
             overflow: hidden;
             position: fixed;
             width: 100%;
+            -webkit-tap-highlight-color: transparent; /* إلغاء الوميض الأزرق في آيفون وأندرويد */
         }
 
         body {
@@ -40,8 +41,8 @@
             margin: 0;
             color: var(--olive-dark);
             cursor: pointer;
-            /* منع السحب لأسفل لتحديث الصفحة في المتصفحات */
             overscroll-behavior-y: contain;
+            -webkit-tap-highlight-color: transparent; /* تأكيد الإلغاء هنا أيضاً */
         }
 
         .container {
@@ -86,7 +87,6 @@
             text-align: center;
             background-color: #fafafa;
             font-weight: bold;
-            /* منع التكبير التلقائي في آيفون عند الضغط على الحقل */
             font-size: 16px; 
         }
 
@@ -237,7 +237,7 @@
             const totalWeightKg = ltr * density;
             const pLtr = price / ltr;
             const pKg = price / totalWeightKg;
-            
+
             const pTanakaLtr = pLtr * 16;
             const pTanakaKg = pKg * 16;
 
