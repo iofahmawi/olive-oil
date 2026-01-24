@@ -8,8 +8,6 @@
     <meta name="theme-color" content="#606c38">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-1024.png">
-    <link rel="manifest" href="manifest.json">
 
     <style>
         :root {
@@ -29,10 +27,9 @@
             align-items: center;
             justify-content: flex-start;
             padding-top: 25px;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             color: var(--olive-dark);
-            overflow: hidden;
             cursor: pointer;
         }
 
@@ -40,12 +37,12 @@
             background: var(--white);
             padding: 1.5rem;
             border-radius: 20px;
-            /* التعديل هنا: ظل خفيف جداً وغير متعب للعين */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             width: 85%;
             max-width: 310px;
             border: 1px solid rgba(62, 74, 17, 0.08);
             cursor: default;
+            margin-bottom: 80px;
         }
 
         h2 {
@@ -98,7 +95,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
         }
 
         .divider {
@@ -107,7 +104,7 @@
         }
 
         .label-text {
-            font-size: 1.1rem; 
+            font-size: 0.95rem; 
             color: #333;
             font-weight: 500;
         }
@@ -115,7 +112,7 @@
         .value {
             font-weight: 700;
             color: var(--olive-primary);
-            font-size: 1.10rem;
+            font-size: 1.05rem;
         }
 
         .highlight-value {
@@ -138,7 +135,7 @@
             text-align: center;
             font-size: 0.85rem; 
             color: var(--dev-text);
-            background-color: transparent; 
+            background-color: rgba(254, 250, 224, 0.9); 
             font-weight: 500;
         }
     </style>
@@ -150,12 +147,12 @@
 
     <div class="input-group">
         <label>سعر العبوة:</label>
-        <input type="number" id="totalPrice" oninput="calculate()" enterkeyhint="next">
+        <input type="number" id="totalPrice" oninput="calculate()" enterkeyhint="next" step="any">
     </div>
 
     <div class="input-group">
         <label>عدد اللترات:</label>
-        <input type="number" id="liters" oninput="calculate()" enterkeyhint="done">
+        <input type="number" id="liters" oninput="calculate()" enterkeyhint="done" step="any">
     </div>
 
     <div class="results">
@@ -178,8 +175,13 @@
         <div class="divider"></div>
 
         <div class="result-item">
-            <span class="label-text">سعر التنكة 16 كجم:</span>
-            <span class="value highlight-value" id="tanakaPrice">0.00</span>
+            <span class="label-text">سعر تنكة 16 لتر:</span>
+            <span class="value highlight-value" id="tanakaLiterPrice">0.00</span>
+        </div>
+
+        <div class="result-item">
+            <span class="label-text">سعر تنكة 16 كجم:</span>
+            <span class="value highlight-value" id="tanakaKgPrice">0.00</span>
         </div>
     </div>
 
@@ -193,21 +195,16 @@
 </div>
 
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
-        });
-    }
+    // وظيفة إغلاق الكيبورد والانتقال بين الحقول
+    document.getElementById('totalPrice').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('liters').focus();
+        }
+    });
 
     document.getElementById('liters').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             this.blur();
-        }
-    });
-
-    document.getElementById('totalPrice').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            document.getElementById('liters').focus();
         }
     });
 
@@ -229,17 +226,22 @@
             const totalWeightKg = ltr * density;
             const pLtr = price / ltr;
             const pKg = price / totalWeightKg;
-            const pTanaka = pKg * 16;
+            
+            const pTanakaLtr = pLtr * 16;
+            const pTanakaKg = pKg * 16;
 
+            // توحيد النمط لاستخدام كسرين دائماً
             document.getElementById('totalKg').innerText = totalWeightKg.toFixed(2);
             document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
             document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
-            document.getElementById('tanakaPrice').innerText = pTanaka.toFixed(2);
+            document.getElementById('tanakaLiterPrice').innerText = pTanakaLtr.toFixed(2);
+            document.getElementById('tanakaKgPrice').innerText = pTanakaKg.toFixed(2);
         } else {
             document.getElementById('totalKg').innerText = "0.00";
             document.getElementById('pricePerLiter').innerText = "0.00";
             document.getElementById('pricePerKg').innerText = "0.00";
-            document.getElementById('tanakaPrice').innerText = "0.00";
+            document.getElementById('tanakaLiterPrice').innerText = "0.00";
+            document.getElementById('tanakaKgPrice').innerText = "0.00";
         }
     }
 </script>
