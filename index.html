@@ -1,268 +1,240 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>حاسبة زيت الزيتون</title>
-
+    
     <meta name="theme-color" content="#606c38">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-1024.png">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-1024.png">
+    <link rel="apple-touch-icon" href="icon-1024.png">
 
     <style>
         :root {
-            --olive-dark: #3e4a11;
-            --olive-primary: #606c38;
-            --olive-light: #fefae0;
-            --gold: #bc6c25;
+            --primary: #606c38; 
+            --accent-gold: #bc6c25; 
             --white: #ffffff;
-            --dev-text: #333333;
+            --bg-light: #f8fafc;
+            --text-main: #283618;
+            --text-muted: #606c38;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --standard-height: 44px;
         }
 
-        /* منع التمرير وإلغاء وميض الضغط */
-        html, body {
-            height: 100%;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            -webkit-tap-highlight-color: transparent; /* إلغاء الوميض الأزرق في آيفون وأندرويد */
+        * { 
+            box-sizing: border-box; 
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
+        
+        html, body { height: 100%; background-color: var(--bg-light); overflow: hidden; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: var(--olive-light);
+            direction: rtl;
+            text-align: right;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 25px;
-            margin: 0;
-            color: var(--olive-dark);
-            cursor: pointer;
-            overscroll-behavior-y: contain;
-            -webkit-tap-highlight-color: transparent; /* تأكيد الإلغاء هنا أيضاً */
+            color: var(--text-main);
+        }
+        
+        .content-wrapper { flex-grow: 1; display: flex; flex-direction: column; }
+
+        .header-olive {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 40px 20px 75px; 
+            text-align: center;
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+            position: relative;
         }
 
-        .container {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            width: 85%;
-            max-width: 310px;
-            border: 1px solid rgba(62, 74, 17, 0.08);
-            cursor: default;
+        .header-olive h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+        .header-olive p { font-size: 0.95rem; opacity: 0.9; }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 24px 0 24px;
+            width: 92%;
+            max-width: 350px;
+            margin: -50px auto 10px; 
+            position: relative;
             z-index: 10;
         }
 
-        h2 {
-            text-align: center;
-            color: var(--olive-primary);
-            margin: 0 0 1.5rem 0;
-            font-size: 1.3rem;
-        }
-
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
+        .input-group { margin-bottom: 15px; } 
+        
+        .input-group label {
             display: block;
-            margin-bottom: 0.4rem;
-            font-weight: 600;
-            font-size: 0.97rem;
-            color: #444;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #f2f2f2;
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-size: 1.1rem;
-            outline: none;
-            text-align: center;
-            background-color: #fafafa;
-            font-weight: bold;
-            font-size: 16px; 
-        }
-
-        input:focus {
-            border-color: var(--gold);
-            background-color: #fff;
-        }
-
-        .results {
-            margin-top: 1.2rem;
-            background: #fcfcfc;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid #f0f0f0;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-        }
-
-        .divider {
-            border-top: 1px solid #eee;
-            margin: 8px 0;
-        }
-
-        .label-text {
             font-size: 0.95rem; 
-            color: #333;
-            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
         }
-
-        .value {
+        
+        .input-group input {
+            width: 100%;
+            height: var(--standard-height);
+            padding: 0 12px; 
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: var(--olive-primary);
-            font-size: 1.05rem;
+            text-align: center; 
+            background: #fdfdfd;
+            color: var(--primary);
+            transition: border-color 0.2s;
         }
 
-        .highlight-value {
-            color: var(--gold);
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: none;
+            background: var(--white);
         }
 
-        .footer {
+        .results-area {
+            margin-top: 15px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 18px;
+            border: 1.5px solid #f1f5f9;
+        }
+
+        .result-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 7px 0;
+            font-size: 0.95rem;
+        }
+
+        .divider { border-top: 1px solid #f1f5f9; margin: 6px 0; }
+
+        .result-label { color: #444; font-weight: 500; }
+        .result-value { color: var(--primary); font-weight: 700; }
+        .highlight { color: var(--accent-gold); font-weight: 700; }
+
+        .density-info {
             text-align: center;
-            margin-top: 1.2rem;
             font-size: 0.75rem;
             color: #aaa;
+            height: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
         }
 
-        .developer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 0.85rem; 
-            color: var(--dev-text);
-            background-color: transparent; 
-            font-weight: 500;
+        .simple-footer { 
+            text-align: center; 
+            font-size: 0.9rem; 
+            padding: 10px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
+            margin-top: auto; 
+            font-weight: 600;
+        }
+
+        .simple-footer a {
+            color: var(--primary);
+            text-decoration: none;
         }
     </style>
 </head>
-<body onclick="closeKeyboard(event)">
+<body onclick="document.activeElement.blur()">
 
-<div class="container" onclick="event.stopPropagation()">
-    <h2>🌿 حاسبة زيت الزيتون</h2>
+    <div class="content-wrapper">
+        <div class="header-olive">
+            <h2>🫒 حاسبة زيت الزيتون</h2>
+            <p>حساب الأوزان والأسعار بدقة</p>
+        </div>
 
-    <div class="input-group">
-        <label>سعر العبوة:</label>
-        <input type="number" id="totalPrice" oninput="calculate()" enterkeyhint="next" step="any">
+        <div class="card" onclick="event.stopPropagation()">
+            <div class="input-group">
+                <label>سعر العبوة:</label>
+                <input type="number" id="totalPrice" oninput="calculate()" step="any">
+            </div>
+
+            <div class="input-group">
+                <label>السعة باللتر:</label>
+                <input type="number" id="liters" oninput="calculate()" step="any">
+            </div>
+
+            <div class="results-area">
+                <div class="result-row">
+                    <span class="result-label">الوزن بالكيلو:</span>
+                    <span class="result-value" id="totalKg">0.00</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row">
+                    <span class="result-label">سعر اللتر:</span>
+                    <span class="result-value" id="pricePerLiter">0.00</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">سعر الكيلو:</span>
+                    <span class="result-value" id="pricePerKg">0.00</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row">
+                    <span class="result-label">سعر تنكة (16 لتر):</span>
+                    <span class="result-value highlight" id="tanakaLiterPrice">0.00</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">سعر تنكة (16 كيلو):</span>
+                    <span class="result-value highlight" id="tanakaKgPrice">0.00</span>
+                </div>
+            </div>
+
+            <p class="density-info">كثافة الزيت المعتمدة 0.916 كجم/لتر</p>
+        </div>
     </div>
 
-    <div class="input-group">
-        <label>السعة باللتر:</label>
-        <input type="number" id="liters" oninput="calculate()" enterkeyhint="done" step="any">
-    </div>
+    <footer class="simple-footer">
+        <a href="https://github.com/iofahmawi" target="_blank">طوّر بواسطة iofahmawi</a>
+    </footer>
 
-    <div class="results">
-        <div class="result-item">
-            <span class="label-text">الوزن بالكيلو:</span>
-            <span class="value" id="totalKg">0.00</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="result-item">
-            <span class="label-text">سعر اللتر:</span>
-            <span class="value" id="pricePerLiter">0.00</span>
-        </div>
-        <div class="result-item">
-            <span class="label-text">سعر الكيلو:</span>
-            <span class="value" id="pricePerKg">0.00</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="result-item">
-            <span class="label-text">سعر تنكة 16 لتر:</span>
-            <span class="value highlight-value" id="tanakaLiterPrice">0.00</span>
-        </div>
-
-        <div class="result-item">
-            <span class="label-text">سعر تنكة 16 كيلو:</span>
-            <span class="value highlight-value" id="tanakaKgPrice">0.00</span>
-        </div>
-    </div>
-
-    <div class="footer">
-    كثافة الزيت المعتمدة 0.916 كجم/لتر
-    </div>
-</div>
-
-<div class="developer">
-    طوّر بواسطة <b>iofahmawi</b>
-</div>
-
-<script>
-    document.getElementById('totalPrice').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            document.getElementById('liters').focus();
-        }
-    });
-
-    document.getElementById('liters').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            this.blur();
-        }
-    });
-
-    function closeKeyboard(event) {
-        if (event.target.tagName !== 'INPUT') {
-            document.activeElement.blur();
-        }
-    }
-
-    function calculate() {
-        const pVal = document.getElementById('totalPrice').value;
-        const lVal = document.getElementById('liters').value;
-
-        const price = parseFloat(pVal);
-        const ltr = parseFloat(lVal);
-        const density = 0.916;
-
-        if (!isNaN(price) && !isNaN(ltr) && price > 0 && ltr > 0) {
-            const totalWeightKg = ltr * density;
-            const pLtr = price / ltr;
-            const pKg = price / totalWeightKg;
-
-            const pTanakaLtr = pLtr * 16;
-            const pTanakaKg = pKg * 16;
-
-            document.getElementById('totalKg').innerText = totalWeightKg.toFixed(2);
-            document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
-            document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
-            document.getElementById('tanakaLiterPrice').innerText = pTanakaLtr.toFixed(2);
-            document.getElementById('tanakaKgPrice').innerText = pTanakaKg.toFixed(2);
-        } else {
-            document.getElementById('totalKg').innerText = "0.00";
-            document.getElementById('pricePerLiter').innerText = "0.00";
-            document.getElementById('pricePerKg').innerText = "0.00";
-            document.getElementById('tanakaLiterPrice').innerText = "0.00";
-            document.getElementById('tanakaKgPrice').innerText = "0.00";
-        }
-    }
-</script>
-
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+    <script>
+        document.getElementById('totalPrice').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') document.getElementById('liters').focus();
         });
-    }
-</script>
+        document.getElementById('liters').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') this.blur();
+        });
 
+        function calculate() {
+            const pVal = document.getElementById('totalPrice').value;
+            const lVal = document.getElementById('liters').value;
+            const price = parseFloat(pVal);
+            const ltr = parseFloat(lVal);
+            const density = 0.916;
+
+            if (!isNaN(price) && !isNaN(ltr) && price > 0 && ltr > 0) {
+                const totalWeightKg = ltr * density;
+                const pLtr = price / ltr;
+                const pKg = price / totalWeightKg;
+
+                document.getElementById('totalKg').innerText = totalWeightKg.toFixed(2);
+                document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
+                document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
+                document.getElementById('tanakaLiterPrice').innerText = (pLtr * 16).toFixed(2);
+                document.getElementById('tanakaKgPrice').innerText = (pKg * 16).toFixed(2);
+            } else {
+                ['totalKg', 'pricePerLiter', 'pricePerKg', 'tanakaLiterPrice', 'tanakaKgPrice'].forEach(f => 
+                    document.getElementById(f).innerText = "0.00"
+                );
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+            });
+        }
+    </script>
 </body>
 </html>
