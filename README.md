@@ -37,6 +37,12 @@
 * `manifest.json`: ملف تعريف التطبيق للتثبيت على الأجهزة.
 * `sw.js`: ملف Service Worker للتشغيل أوفلاين.
 
+<br>
+
+<center>
+
 **طوّر بواسطة**: [iofahmawi](https://github.com/iofahmawi)
+
+</center>
 
 </div>
