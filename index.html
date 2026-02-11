@@ -144,6 +144,12 @@
             color: var(--primary);
             text-decoration: none;
         }
+
+        /* تنسيق الجزء العربي من التوقيع */
+        .footer-text-ar {
+            color: #888;
+            font-weight: normal;
+        }
     </style>
 </head>
 <body onclick="document.activeElement.blur()">
@@ -195,7 +201,9 @@
     </div>
 
     <footer class="simple-footer">
-        <a href="https://github.com/iofahmawi" target="_blank">طوّر بواسطة iofahmawi</a>
+        <a href="https://github.com/iofahmawi" target="_blank">
+            <span class="footer-text-ar">طوّر بواسطة</span> iofahmawi
+        </a>
     </footer>
 
     <script>
