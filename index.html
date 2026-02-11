@@ -145,7 +145,6 @@
             text-decoration: none;
         }
 
-        /* تنسيق الجزء العربي من التوقيع */
         .footer-text-ar {
             color: #888;
             font-weight: normal;
@@ -163,12 +162,12 @@
         <div class="card" onclick="event.stopPropagation()">
             <div class="input-group">
                 <label>سعر العبوة:</label>
-                <input type="number" id="totalPrice" oninput="calculate()" step="any">
+                <input type="number" id="totalPrice" oninput="calculate()" step="any" autocomplete="off">
             </div>
 
             <div class="input-group">
                 <label>السعة باللتر:</label>
-                <input type="number" id="liters" oninput="calculate()" step="any">
+                <input type="number" id="liters" oninput="calculate()" step="any" autocomplete="off">
             </div>
 
             <div class="results-area">
@@ -207,6 +206,13 @@
     </footer>
 
     <script>
+        // كود لضمان تصفير الخانات فور فتح الصفحة
+        window.onload = function() {
+            document.getElementById('totalPrice').value = '';
+            document.getElementById('liters').value = '';
+            calculate(); 
+        };
+
         document.getElementById('totalPrice').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') document.getElementById('liters').focus();
         });
