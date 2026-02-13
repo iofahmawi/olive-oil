@@ -162,12 +162,14 @@
         <div class="card" onclick="event.stopPropagation()">
             <div class="input-group">
                 <label>سعر العبوة:</label>
-                <input type="number" id="totalPrice" oninput="calculate()" step="any" autocomplete="off">
+                <!-- تمت إضافة inputmode="decimal" هنا -->
+                <input type="number" inputmode="decimal" id="totalPrice" oninput="calculate()" step="any" autocomplete="off">
             </div>
 
             <div class="input-group">
                 <label>السعة باللتر:</label>
-                <input type="number" id="liters" oninput="calculate()" step="any" autocomplete="off">
+                <!-- تمت إضافة inputmode="decimal" هنا -->
+                <input type="number" inputmode="decimal" id="liters" oninput="calculate()" step="any" autocomplete="off">
             </div>
 
             <div class="results-area">
