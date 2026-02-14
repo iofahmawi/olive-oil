@@ -47,6 +47,7 @@
         .header-olive {
             background-color: var(--primary);
             color: var(--white);
+            /* تقليل المسافات هنا لضمان ظهور المحتوى كاملاً في المتصفح العادي */
             padding: 25px 20px 60px; 
             text-align: center;
             border-bottom-left-radius: 35px;
@@ -54,15 +55,16 @@
             position: relative;
         }
 
-        /* إضافة المسافة فقط عند التشغيل كـ PWA */
+        /* إضافة المسافة المطلوبة 1.25 سم فقط عند التشغيل كـ PWA */
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
                 padding-top: calc(1.25cm + env(safe-area-inset-top, 0px));
+                padding-bottom: 80px; /* زيادة مساحة الخلفية في وضع PWA لتعويض المسافة العلوية */
             }
         }
 
-        .header-olive h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; }
-        .header-olive p { font-size: 0.9rem; opacity: 0.9; }
+        .header-olive h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+        .header-olive p { font-size: 1rem; opacity: 0.9; }
 
         .card {
             background-color: var(--white);
@@ -71,6 +73,7 @@
             padding: 20px 20px 10px 20px;
             width: 92%;
             max-width: 350px;
+            /* رفع الكرت قليلاً للأعلى ليناسب الهيدر الجديد */
             margin: -45px auto 5px; 
             position: relative;
             z-index: 10;
