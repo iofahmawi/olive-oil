@@ -47,7 +47,8 @@
         .header-olive {
             background-color: var(--primary);
             color: var(--white);
-            padding: 25px 20px 60px; 
+            /* ضبط المسافات: زيادة العلوي لراحة العين وتقليل السفلي للتناسب مع البطاقة */
+            padding: 30px 30px 65px; 
             text-align: center;
             border-bottom-left-radius: 35px;
             border-bottom-right-radius: 35px;
@@ -56,19 +57,29 @@
 
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
-                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
-                padding-bottom: 80px; 
+                padding-top: calc(1.30cm + env(safe-area-inset-top, 0px));
+                padding-bottom: 85px; 
             }
         }
 
-        .header-olive h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
-        .header-olive p { font-size: 1rem; opacity: 0.9; }
+        .header-olive h2 { 
+            font-size: 1.6rem; 
+            font-weight: 700; 
+            margin-bottom: 6px; 
+        }
+
+        .header-olive p { 
+            font-size: 0.95rem; 
+            opacity: 0.9; 
+            font-weight: 400;
+        }
 
         .card {
             background-color: var(--white);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 23px; 
+            /* توحيد المسافات الجانبية والسفلية لتماثل بصري كامل */
+            padding: 23px 23px 23px; 
             width: 92%;
             max-width: 350px;
             margin: -35px auto 5px; 
@@ -106,10 +117,10 @@
         }
 
         .results-area {
-            margin-top: 15px;
+            margin-top: 20px;
             background: var(--white);
             border-radius: 12px;
-            padding: 10px 15px; /* تقليل الحشو العلوي والسفلي قليلاً */
+            padding: 10px 15px; 
             border: 1.5px solid #f1f5f9;
         }
 
@@ -117,11 +128,11 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 6px 0; /* تقليل المسافة بين الأسطر من 7px إلى 5px */
-            font-size: 0.94rem; 
+            padding: 7px 0; 
+            font-size: 0.95rem; 
         }
 
-        .divider { border-top: 1px solid #f1f5f9; margin: 4px 0; } /* تقليل مسافة الفاصل من 6px إلى 4px */
+        .divider { border-top: 1px solid #f1f5f9; margin: 5px 0; } 
 
         .result-label { color: #444; font-weight: 500; }
         .result-value { color: var(--primary); font-weight: 700; }
@@ -130,7 +141,7 @@
         .simple-footer { 
             text-align: center; 
             font-size: 0.9rem; 
-            padding: 20px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
+            padding: 15px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
             margin-top: auto; 
         }
 
@@ -163,11 +174,6 @@
             <div class="input-group">
                 <label>السعة باللتر:</label>
                 <input type="number" inputmode="decimal" id="liters" oninput="calculate()" step="any" autocomplete="off" onkeydown="if(event.key==='Enter') this.blur()">
-            </div>
-
-            <div class="input-group">
-                <label>كثافة الزيت:</label>
-                <input type="number" inputmode="decimal" id="density" oninput="calculate()" step="0.001" value="0.916" autocomplete="off" onkeydown="if(event.key==='Enter') this.blur()">
             </div>
 
             <div class="results-area">
@@ -213,11 +219,10 @@
         function calculate() {
             const pVal = document.getElementById('totalPrice').value;
             const lVal = document.getElementById('liters').value;
-            let dVal = document.getElementById('density').value;
+            const density = 0.916; // قيمة ثابتة للكثافة
 
             const price = parseFloat(pVal);
             const ltr = parseFloat(lVal);
-            let density = parseFloat(dVal) || 0.916;
 
             if (!isNaN(price) && !isNaN(ltr) && price > 0 && ltr > 0) {
                 const totalWeightKg = ltr * density;
