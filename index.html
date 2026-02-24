@@ -47,7 +47,6 @@
         .header-olive {
             background-color: var(--primary);
             color: var(--white);
-            /* تقليل المسافات هنا لضمان ظهور المحتوى كاملاً في المتصفح العادي */
             padding: 25px 20px 60px; 
             text-align: center;
             border-bottom-left-radius: 35px;
@@ -55,11 +54,10 @@
             position: relative;
         }
 
-        /* إضافة المسافة المطلوبة 1.25 سم فقط عند التشغيل كـ PWA */
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
                 padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
-                padding-bottom: 80px; /* زيادة مساحة الخلفية في وضع PWA لتعويض المسافة العلوية */
+                padding-bottom: 80px; 
             }
         }
 
@@ -70,10 +68,10 @@
             background-color: var(--white);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 20px 20px 10px 20px;
+            /* تم تعديل الهامش السفلي هنا ليكون 20px مساوياً للجوانب */
+            padding: 20px; 
             width: 92%;
             max-width: 350px;
-            /* رفع الكرت قليلاً للأعلى ليناسب الهيدر الجديد */
             margin: -35px auto 5px; 
             position: relative;
             z-index: 10;
@@ -197,7 +195,6 @@
                     <span class="result-value highlight" id="tanakaKgPrice">0.00</span>
                 </div>
             </div>
-            <br>
         </div>
     </div>
 
