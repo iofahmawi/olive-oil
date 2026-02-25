@@ -32,13 +32,10 @@
             outline: none;
         }
 
-        /* تعديل: جعل خلفية الـ html تطابق الهيدر لسد أي فجوة تقنية */
-        html { background-color: var(--primary); }
+        /* تم استرجاع الخلفية الطبيعية هنا ليعود شريط التنقل بالأسفل للونه الأصلي */
+        html, body { height: 100%; background-color: var(--bg-light); overflow: hidden; }
 
-        body { 
-            height: 100%; 
-            background-color: var(--bg-light); 
-            overflow: hidden; 
+        body {
             direction: rtl;
             text-align: right;
             display: flex;
@@ -56,13 +53,23 @@
             border-bottom-left-radius: 35px;
             border-bottom-right-radius: 35px;
             position: relative;
-            /* تعديل: سحب الهيدر بكسل إضافي للأعلى لضمان عدم وجود فراغ */
-            margin-top: -1px;
+        }
+
+        /* هذه الإضافة هي الحل السحري: عنصر وهمي يمتد للأعلى فقط لسد أي فجوة عند شريط الإشعارات */
+        .header-olive::before {
+            content: "";
+            position: absolute;
+            top: -100px; 
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: var(--primary);
+            z-index: -1;
         }
 
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
-                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px) + 1px);
+                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
                 padding-bottom: 80px; 
             }
         }
