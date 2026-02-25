@@ -47,8 +47,7 @@
         .header-olive {
             background-color: var(--primary);
             color: var(--white);
-            /* ضبط المسافات: زيادة العلوي لراحة العين وتقليل السفلي للتناسب مع البطاقة */
-            padding: 30px 30px 65px; 
+            padding: 30px 25px 60px; 
             text-align: center;
             border-bottom-left-radius: 35px;
             border-bottom-right-radius: 35px;
@@ -58,28 +57,18 @@
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
                 padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
-                padding-bottom: 85px; 
+                padding-bottom: 80px; 
             }
         }
 
-        .header-olive h2 { 
-            font-size: 1.6rem; 
-            font-weight: 700; 
-            margin-bottom: 6px; 
-        }
-
-        .header-olive p { 
-            font-size: 0.95rem; 
-            opacity: 0.9; 
-            font-weight: 400;
-        }
+        .header-olive h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+        .header-olive p { font-size: 1rem; opacity: 0.9; }
 
         .card {
             background-color: var(--white);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            /* توحيد المسافات الجانبية والسفلية لتماثل بصري كامل */
-            padding: 23px 23px 23px; 
+            padding: 23px; 
             width: 92%;
             max-width: 350px;
             margin: -35px auto 5px; 
@@ -116,8 +105,9 @@
             background: var(--white);
         }
 
+        /* تعديل المسافة لتكون موزونة بـ 18px */
         .results-area {
-            margin-top: 20px;
+            margin-top: 20px; 
             background: var(--white);
             border-radius: 12px;
             padding: 10px 15px; 
@@ -128,11 +118,11 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 7px 0; 
-            font-size: 0.95rem; 
+            padding: 6px 0; 
+            font-size: 0.94rem; 
         }
 
-        .divider { border-top: 1px solid #f1f5f9; margin: 5px 0; } 
+        .divider { border-top: 1px solid #f1f5f9; margin: 4px 0; } 
 
         .result-label { color: #444; font-weight: 500; }
         .result-value { color: var(--primary); font-weight: 700; }
@@ -141,7 +131,7 @@
         .simple-footer { 
             text-align: center; 
             font-size: 0.9rem; 
-            padding: 15px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
+            padding: 20px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
             margin-top: auto; 
         }
 
@@ -178,10 +168,17 @@
 
             <div class="results-area">
                 <div class="result-row">
+                    <span class="result-label">كثافة الزيت:</span>
+                    <span class="result-value">0.916</span>
+                </div>
+                <div class="divider"></div>
+                
+                <div class="result-row">
                     <span class="result-label">الوزن بالكيلو:</span>
                     <span class="result-value" id="totalKg">0.00</span>
                 </div>
                 <div class="divider"></div>
+                
                 <div class="result-row">
                     <span class="result-label">سعر اللتر الواحد:</span>
                     <span class="result-value" id="pricePerLiter">0.00</span>
@@ -191,6 +188,7 @@
                     <span class="result-value" id="pricePerKg">0.00</span>
                 </div>
                 <div class="divider"></div>
+                
                 <div class="result-row">
                     <span class="result-label">سعر تنكة 16 لتر:</span>
                     <span class="result-value highlight" id="tanakaLiterPrice">0.00</span>
@@ -210,6 +208,8 @@
     </footer>
 
     <script>
+        const DENSITY = 0.916;
+
         window.onload = function() {
             document.getElementById('totalPrice').value = '';
             document.getElementById('liters').value = '';
@@ -219,13 +219,12 @@
         function calculate() {
             const pVal = document.getElementById('totalPrice').value;
             const lVal = document.getElementById('liters').value;
-            const density = 0.916; // قيمة ثابتة للكثافة
 
             const price = parseFloat(pVal);
             const ltr = parseFloat(lVal);
 
             if (!isNaN(price) && !isNaN(ltr) && price > 0 && ltr > 0) {
-                const totalWeightKg = ltr * density;
+                const totalWeightKg = ltr * DENSITY;
                 const pLtr = price / ltr;
                 const pKg = price / totalWeightKg;
 
