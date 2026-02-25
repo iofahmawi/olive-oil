@@ -32,9 +32,13 @@
             outline: none;
         }
 
-        html, body { height: 100%; background-color: var(--bg-light); overflow: hidden; }
+        /* تعديل: جعل خلفية الـ html تطابق الهيدر لسد أي فجوة تقنية */
+        html { background-color: var(--primary); }
 
-        body {
+        body { 
+            height: 100%; 
+            background-color: var(--bg-light); 
+            overflow: hidden; 
             direction: rtl;
             text-align: right;
             display: flex;
@@ -52,11 +56,13 @@
             border-bottom-left-radius: 35px;
             border-bottom-right-radius: 35px;
             position: relative;
+            /* تعديل: سحب الهيدر بكسل إضافي للأعلى لضمان عدم وجود فراغ */
+            margin-top: -1px;
         }
 
         @media (display-mode: standalone), (display-mode: fullscreen) {
             .header-olive {
-                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
+                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px) + 1px);
                 padding-bottom: 80px; 
             }
         }
@@ -269,7 +275,6 @@
         let currentDensity = DEFAULT_DENSITY;
 
         window.onload = function() {
-            // استرجاع الكثافة المحفوظة عند فتح التطبيق
             const savedDensity = localStorage.getItem('oliveDensity');
             if (savedDensity) {
                 currentDensity = parseFloat(savedDensity);
@@ -301,10 +306,10 @@
             
             if (val === "") {
                 currentDensity = DEFAULT_DENSITY;
-                localStorage.removeItem('oliveDensity'); // حذف القيمة المخزنة للعودة للافتراضي
+                localStorage.removeItem('oliveDensity');
             } else if (!isNaN(val) && parseFloat(val) > 0) {
                 currentDensity = parseFloat(val);
-                localStorage.setItem('oliveDensity', currentDensity); // حفظ القيمة الجديدة
+                localStorage.setItem('oliveDensity', currentDensity);
             }
 
             document.getElementById('densityValue').innerText = currentDensity;
