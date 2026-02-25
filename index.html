@@ -100,10 +100,7 @@
             transition: border-color 0.2s;
         }
 
-        .input-group input:focus {
-            border-color: var(--primary);
-            background: var(--white);
-        }
+        .input-group input:focus { border-color: var(--primary); background: var(--white); }
 
         .results-area {
             margin-top: 20px; 
@@ -127,23 +124,73 @@
         .result-value { color: var(--primary); font-weight: 700; }
         .highlight { color: var(--accent-gold); font-weight: 700; }
 
+        #densityValue { cursor: pointer; }
+
+        /* النافذة المنبثقة المخصصة */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 85%;
+            max-width: 300px;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h3 { margin-bottom: 15px; font-size: 1.1rem; color: var(--primary); }
+
+        .modal-input {
+            width: 100%;
+            height: 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .modal-btns { display: flex; gap: 10px; }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-save { background: var(--primary); color: white; }
+        .btn-cancel { background: #f1f5f9; color: #64748b; }
+
         .simple-footer { 
-            text-align: center; 
-            font-size: 0.9rem; 
+            text-align: center; font-size: 0.9rem; 
             padding: 20px 0 calc(15px + env(safe-area-inset-bottom, 0px)); 
             margin-top: auto; 
         }
 
-        .simple-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-text-ar {
-            color: #888;
-            font-weight: normal;
-        }
+        .simple-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .footer-text-ar { color: #888; font-weight: normal; }
     </style>
 </head>
 <body onclick="document.activeElement.blur()">
@@ -166,9 +213,9 @@
             </div>
 
             <div class="results-area">
-                <div class="result-row">
+                <div class="result-row" style="cursor: pointer;" onclick="openModal()">
                     <span class="result-label">كثافة الزيت:</span>
-                    <span class="result-value">0.916</span>
+                    <span class="result-value" id="densityValue">0.916</span>
                 </div>
                 <div class="divider"></div>
                 
@@ -200,6 +247,17 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="densityModal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>تعديل كثافة الزيت</h3>
+            <input type="number" inputmode="decimal" id="newDensityInput" class="modal-input" step="0.001" onkeydown="if(event.key==='Enter') saveDensity()">
+            <div class="modal-btns">
+                <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
+                <button class="btn btn-save" onclick="saveDensity()">حفظ</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="simple-footer">
         <a href="https://github.com/iofahmawi" target="_blank">
             <span class="footer-text-ar">طوّر بواسطة</span> iofahmawi
@@ -207,7 +265,8 @@
     </footer>
 
     <script>
-        const DENSITY = 0.916;
+        const DEFAULT_DENSITY = 0.916;
+        let currentDensity = DEFAULT_DENSITY;
 
         window.onload = function() {
             document.getElementById('totalPrice').value = '';
@@ -215,15 +274,43 @@
             calculate(); 
         };
 
+        function openModal() {
+            document.getElementById('newDensityInput').value = currentDensity;
+            document.getElementById('densityModal').style.display = 'flex';
+            // تركيز تلقائي وسهولة مسح الرقم القديم
+            setTimeout(() => {
+                const input = document.getElementById('newDensityInput');
+                input.focus();
+                input.select(); 
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('densityModal').style.display = 'none';
+        }
+
+        function saveDensity() {
+            const val = document.getElementById('newDensityInput').value.trim();
+            
+            if (val === "") {
+                currentDensity = DEFAULT_DENSITY;
+            } else if (!isNaN(val) && parseFloat(val) > 0) {
+                currentDensity = parseFloat(val);
+            }
+
+            document.getElementById('densityValue').innerText = currentDensity;
+            calculate();
+            closeModal();
+        }
+
         function calculate() {
             const pVal = document.getElementById('totalPrice').value;
             const lVal = document.getElementById('liters').value;
-
             const price = parseFloat(pVal);
             const ltr = parseFloat(lVal);
 
             if (!isNaN(price) && !isNaN(ltr) && price > 0 && ltr > 0) {
-                const totalWeightKg = ltr * DENSITY;
+                const totalWeightKg = ltr * currentDensity;
                 const pLtr = price / ltr;
                 const pKg = price / totalWeightKg;
 
