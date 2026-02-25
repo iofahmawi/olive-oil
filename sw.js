@@ -1,4 +1,4 @@
-const cacheName = 'olive-calc-v45';
+const cacheName = 'olive-calc-v46';
 const assets = [
   './',
   'index.html',
