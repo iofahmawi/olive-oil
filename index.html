@@ -256,7 +256,7 @@
     <div class="modal-overlay" id="densityModal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h3 style="margin-bottom: 15px; color: var(--primary);">تعديل كثافة الزيت</h3>
-            <input type="number" inputmode="decimal" id="newDensityInput" class="modal-input" onkeydown="handleEnter(event, true, 'density')" step="0.001">
+            <input type="number" inputmode="decimal" id="newDensityInput" class="modal-input" onkeydown="handleEnter(event, true, 'density')" oninput="validatePositive(this)" step="0.001" min="0.001">
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
                 <button class="btn btn-save" onclick="saveDensity()">حفظ</button>
@@ -381,11 +381,37 @@
         function closeModal() { 
             document.getElementById('densityModal').style.display = 'none'; 
             document.getElementById('sizeModal').style.display = 'none';
+            const di = document.getElementById('newDensityInput');
+            di.style.borderColor = ''; di.style.background = '';
+        }
+
+        function validatePositive(input) {
+            const val = parseFloat(input.value);
+            if (input.value !== '' && !isNaN(val) && val <= 0) {
+                input.style.borderColor = '#e53e3e';
+                input.style.background = '#fff5f5';
+            } else {
+                input.style.borderColor = '#e2e8f0';
+                input.style.background = '';
+            }
         }
 
         function saveDensity() {
-            const val = document.getElementById('newDensityInput').value.trim();
-            currentDensity = (val === "" || isNaN(parseFloat(val)) || parseFloat(val) <= 0) ? DEFAULT_DENSITY : parseFloat(val);
+            const input = document.getElementById('newDensityInput');
+            const raw = input.value.trim();
+            const val = parseFloat(raw);
+            // إذا كان فارغاً → يرجع للقيمة الافتراضية
+            if (raw === '' || isNaN(val)) {
+                currentDensity = DEFAULT_DENSITY;
+            } else if (val <= 0) {
+                // يمنع السالب والصفر
+                input.style.borderColor = '#e53e3e';
+                input.style.background = '#fff5f5';
+                input.focus();
+                return;
+            } else {
+                currentDensity = val;
+            }
             localStorage.setItem('oliveDensity', currentDensity);
             document.getElementById('densityValue').innerText = currentDensity;
             calculate();
