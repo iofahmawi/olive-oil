@@ -1,5 +1,5 @@
 // رقم النسخة - قم بتغييره (مثلاً من v3 إلى v4) عند إجراء أي تعديل مستقبلي
-const CACHE_NAME = 'olive-calc-v4'; 
+const CACHE_NAME = 'olive-calc-v5'; 
 const ASSETS = [
   './',
   './index.html',
