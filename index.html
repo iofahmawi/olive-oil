@@ -195,6 +195,12 @@
 
         .simple-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
         .footer-text-ar { color: #888; font-weight: normal; }
+
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
     </style>
 </head>
 <body onclick="document.activeElement.blur()">
@@ -239,7 +245,7 @@
                 </div>
                 <div class="divider"></div>
 
-                <div class="result-row" style="cursor: pointer;" onclick="toggleTanakaUnit()">
+                <div class="result-row no-select" style="cursor: pointer;" id="tanakaRow">
                     <span class="result-label" id="tanakaLabel">سعر تنكة 16 كيلو:</span>
                     <span class="result-value highlight" id="tanakaValue">0.00</span>
                 </div>
@@ -250,10 +256,21 @@
     <div class="modal-overlay" id="densityModal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h3 style="margin-bottom: 15px; color: var(--primary);">تعديل كثافة الزيت</h3>
-            <input type="number" inputmode="decimal" id="newDensityInput" class="modal-input" onkeydown="handleEnter(event, true)" step="0.001">
+            <input type="number" inputmode="decimal" id="newDensityInput" class="modal-input" onkeydown="handleEnter(event, true, 'density')" step="0.001">
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
                 <button class="btn btn-save" onclick="saveDensity()">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="sizeModal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="sizeModalTitle" style="margin-bottom: 15px; color: var(--primary);">تعديل الحجم</h3>
+            <input type="number" inputmode="decimal" id="newSizeInput" class="modal-input" onkeydown="handleEnter(event, true, 'size')" step="any">
+            <div class="modal-btns">
+                <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
+                <button class="btn btn-save" onclick="saveSize()">حفظ</button>
             </div>
         </div>
     </div>
@@ -266,9 +283,27 @@
 
     <script>
         const DEFAULT_DENSITY = 0.916;
+        const DEFAULT_SIZE = 16;
+        
         let currentDensity = DEFAULT_DENSITY;
+        let tanakaSize = DEFAULT_SIZE;
         let inputMode = 'ltr'; 
         let tanakaMode = 'kg';
+
+        let pressTimer;
+        const tanakaRow = document.getElementById('tanakaRow');
+
+        tanakaRow.addEventListener('mousedown', startPress);
+        tanakaRow.addEventListener('touchstart', startPress);
+        tanakaRow.addEventListener('mouseup', cancelPress);
+        tanakaRow.addEventListener('mouseleave', cancelPress);
+        tanakaRow.addEventListener('touchend', cancelPress);
+        tanakaRow.addEventListener('click', function() { toggleTanakaUnit(); });
+
+        function startPress(e) {
+            pressTimer = window.setTimeout(function() { openSizeModal(); }, 600);
+        }
+        function cancelPress() { clearTimeout(pressTimer); }
 
         window.onload = function() {
             const savedDensity = localStorage.getItem('oliveDensity');
@@ -276,27 +311,55 @@
                 currentDensity = parseFloat(savedDensity);
                 document.getElementById('densityValue').innerText = currentDensity;
             }
+            const savedSize = localStorage.getItem('oliveTanakaSize');
+            if (savedSize) { tanakaSize = parseFloat(savedSize); }
+
+            const savedInputMode = localStorage.getItem('oliveInputMode');
+            if (savedInputMode) { 
+                inputMode = savedInputMode; 
+                updateInputLabels();
+            }
+
+            const savedTanakaMode = localStorage.getItem('oliveTanakaMode');
+            if (savedTanakaMode) { tanakaMode = savedTanakaMode; }
+            
+            updateTanakaLabel();
             calculate(); 
         };
 
-        function handleEnter(event, isModal = false) {
+        function handleEnter(event, isModal = false, type = '') {
             if (event.key === "Enter") {
                 event.target.blur();
-                if (isModal) saveDensity();
+                if (isModal) {
+                    if (type === 'density') saveDensity();
+                    if (type === 'size') saveSize();
+                }
             }
         }
 
         function toggleInputUnit() {
             inputMode = (inputMode === 'ltr') ? 'kg' : 'ltr';
-            document.getElementById('quantityLabel').innerText = (inputMode === 'ltr') ? "السعة باللتر:" : "الوزن بالكيلو:";
-            document.getElementById('altResultLabel').innerText = (inputMode === 'ltr') ? "الوزن بالكيلو:" : "السعة باللتر:";
+            localStorage.setItem('oliveInputMode', inputMode);
+            updateInputLabels();
             calculate();
         }
 
+        function updateInputLabels() {
+            document.getElementById('quantityLabel').innerText = (inputMode === 'ltr') ? "السعة باللتر:" : "الوزن بالكيلو:";
+            document.getElementById('altResultLabel').innerText = (inputMode === 'ltr') ? "الوزن بالكيلو:" : "السعة باللتر:";
+        }
+
         function toggleTanakaUnit() {
+            if(document.getElementById('sizeModal').style.display === 'flex') return;
             tanakaMode = (tanakaMode === 'kg') ? 'ltr' : 'kg';
-            document.getElementById('tanakaLabel').innerText = (tanakaMode === 'kg') ? "سعر تنكة 16 كيلو:" : "سعر تنكة 16 لتر:";
+            localStorage.setItem('oliveTanakaMode', tanakaMode);
+            updateTanakaLabel();
             calculate();
+        }
+
+        function updateTanakaLabel() {
+            const unitText = (tanakaMode === 'kg') ? "كيلو" : "لتر";
+            document.getElementById('tanakaLabel').innerText = `سعر عبوة ${tanakaSize} ${unitText}:`;
         }
 
         function openModal() {
@@ -306,13 +369,39 @@
             setTimeout(() => { modalInput.focus(); modalInput.select(); }, 100);
         }
 
-        function closeModal() { document.getElementById('densityModal').style.display = 'none'; }
+        function openSizeModal() {
+            clearTimeout(pressTimer);
+            const modalInput = document.getElementById('newSizeInput');
+            modalInput.value = tanakaSize;
+            document.getElementById('sizeModalTitle').innerText = (tanakaMode === 'kg') ? "تعديل الوزن (كيلو)" : "تعديل السعة (لتر)";
+            document.getElementById('sizeModal').style.display = 'flex';
+            setTimeout(() => { modalInput.focus(); modalInput.select(); }, 100);
+        }
+
+        function closeModal() { 
+            document.getElementById('densityModal').style.display = 'none'; 
+            document.getElementById('sizeModal').style.display = 'none';
+        }
 
         function saveDensity() {
             const val = document.getElementById('newDensityInput').value.trim();
             currentDensity = (val === "" || isNaN(parseFloat(val)) || parseFloat(val) <= 0) ? DEFAULT_DENSITY : parseFloat(val);
             localStorage.setItem('oliveDensity', currentDensity);
             document.getElementById('densityValue').innerText = currentDensity;
+            calculate();
+            closeModal();
+        }
+
+        function saveSize() {
+            const val = document.getElementById('newSizeInput').value.trim();
+            // تعديل: إذا كان الحقل فارغاً أو غير صالح، نعود للقيمة 16
+            if (val === "" || isNaN(parseFloat(val)) || parseFloat(val) <= 0) {
+                tanakaSize = DEFAULT_SIZE;
+            } else {
+                tanakaSize = parseFloat(val);
+            }
+            localStorage.setItem('oliveTanakaSize', tanakaSize);
+            updateTanakaLabel();
             calculate();
             closeModal();
         }
@@ -334,7 +423,9 @@
                 const pKg = price / kg;
                 document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
                 document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
-                document.getElementById('tanakaValue').innerText = (tanakaMode === 'kg') ? (pKg * 16).toFixed(2) : (pLtr * 16).toFixed(2);
+                
+                const result = (tanakaMode === 'kg') ? (pKg * tanakaSize) : (pLtr * tanakaSize);
+                document.getElementById('tanakaValue').innerText = result.toFixed(2);
             } else {
                 ['altResultValue', 'pricePerLiter', 'pricePerKg', 'tanakaValue'].forEach(id => 
                     document.getElementById(id).innerText = "0.00"
