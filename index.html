@@ -454,8 +454,11 @@
         function calculate() {
             const price = parseFloat(document.getElementById('totalPrice').value);
             const qty = parseFloat(document.getElementById('quantity').value);
-            
-            if (!isNaN(price) && !isNaN(qty) && price > 0 && qty > 0) {
+            const hasQty = !isNaN(qty) && qty > 0;
+            const hasPrice = !isNaN(price) && price > 0;
+
+            // كمية فقط → يظهر التحويل بدون سعر
+            if (hasQty) {
                 let ltr, kg;
                 if (inputMode === 'ltr') {
                     ltr = qty; kg = qty * currentDensity;
@@ -464,13 +467,19 @@
                     kg = qty; ltr = qty / currentDensity;
                     document.getElementById('altResultValue').innerText = ltr.toFixed(2);
                 }
-                const pLtr = price / ltr;
-                const pKg = price / kg;
-                document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
-                document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
-                
-                const result = (tanakaMode === 'kg') ? (pKg * tanakaSize) : (pLtr * tanakaSize);
-                document.getElementById('tanakaValue').innerText = result.toFixed(2);
+
+                if (hasPrice) {
+                    const pLtr = price / ltr;
+                    const pKg = price / kg;
+                    document.getElementById('pricePerLiter').innerText = pLtr.toFixed(2);
+                    document.getElementById('pricePerKg').innerText = pKg.toFixed(2);
+                    const result = (tanakaMode === 'kg') ? (pKg * tanakaSize) : (pLtr * tanakaSize);
+                    document.getElementById('tanakaValue').innerText = result.toFixed(2);
+                } else {
+                    ['pricePerLiter', 'pricePerKg', 'tanakaValue'].forEach(id =>
+                        document.getElementById(id).innerText = "0.00"
+                    );
+                }
             } else {
                 ['altResultValue', 'pricePerLiter', 'pricePerKg', 'tanakaValue'].forEach(id => 
                     document.getElementById(id).innerText = "0.00"
