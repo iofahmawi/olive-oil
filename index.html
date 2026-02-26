@@ -394,7 +394,6 @@
 
         function saveSize() {
             const val = document.getElementById('newSizeInput').value.trim();
-            // تعديل: إذا كان الحقل فارغاً أو غير صالح، نعود للقيمة 16
             if (val === "" || isNaN(parseFloat(val)) || parseFloat(val) <= 0) {
                 tanakaSize = DEFAULT_SIZE;
             } else {
@@ -433,9 +432,27 @@
             }
         }
 
+        // تسجيل Service Worker مع منطق التحديث الإجباري
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                window.location.reload(); 
+                            }
+                        });
+                    });
+                }).catch(err => console.log('SW Error:', err));
+            });
+
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    window.location.reload();
+                    refreshing = true;
+                }
             });
         }
     </script>
