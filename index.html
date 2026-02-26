@@ -223,7 +223,7 @@
             </div>
 
             <div class="results-area">
-                <div class="result-row" style="cursor: pointer;" onclick="openModal()">
+                <div class="result-row" style="cursor: pointer;" id="densityRow">
                     <span class="result-label">كثافة الزيت:</span>
                     <span class="result-value" id="densityValue">0.916</span>
                 </div>
@@ -291,19 +291,31 @@
         let tanakaMode = 'kg';
 
         let pressTimer;
+        let pressTarget = null;
         const tanakaRow = document.getElementById('tanakaRow');
+        const densityRow = document.getElementById('densityRow');
 
-        tanakaRow.addEventListener('mousedown', startPress);
-        tanakaRow.addEventListener('touchstart', startPress);
+        tanakaRow.addEventListener('mousedown', e => startPress(e, 'size'));
+        tanakaRow.addEventListener('touchstart', e => startPress(e, 'size'));
         tanakaRow.addEventListener('mouseup', cancelPress);
         tanakaRow.addEventListener('mouseleave', cancelPress);
         tanakaRow.addEventListener('touchend', cancelPress);
         tanakaRow.addEventListener('click', function() { toggleTanakaUnit(); });
 
-        function startPress(e) {
-            pressTimer = window.setTimeout(function() { openSizeModal(); }, 600);
+        densityRow.addEventListener('mousedown', e => startPress(e, 'density'));
+        densityRow.addEventListener('touchstart', e => startPress(e, 'density'));
+        densityRow.addEventListener('mouseup', cancelPress);
+        densityRow.addEventListener('mouseleave', cancelPress);
+        densityRow.addEventListener('touchend', cancelPress);
+
+        function startPress(e, target) {
+            pressTarget = target;
+            pressTimer = window.setTimeout(function() {
+                if (pressTarget === 'size') openSizeModal();
+                else if (pressTarget === 'density') openModal();
+            }, 600);
         }
-        function cancelPress() { clearTimeout(pressTimer); }
+        function cancelPress() { clearTimeout(pressTimer); pressTarget = null; }
 
         window.onload = function() {
             const savedDensity = localStorage.getItem('oliveDensity');
