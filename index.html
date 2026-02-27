@@ -387,7 +387,7 @@
             const modalInput = document.getElementById('newDensityInput');
             modalInput.value = currentDensity;
             document.getElementById('densityModal').style.display = 'flex';
-            setTimeout(() => { modalInput.focus(); modalInput.select(); }, 100);
+            setTimeout(() => { modalInput.focus(); }, 100);
         }
 
         function openSizeModal() {
@@ -396,7 +396,7 @@
             modalInput.value = tanakaSize;
             document.getElementById('sizeModalTitle').innerText = (tanakaMode === 'kg') ? "تعديل الوزن" : "تعديل السعة";
             document.getElementById('sizeModal').style.display = 'flex';
-            setTimeout(() => { modalInput.focus(); modalInput.select(); }, 100);
+            setTimeout(() => { modalInput.focus(); }, 100);
         }
 
         function closeModal() { 
