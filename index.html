@@ -73,6 +73,15 @@
         }
 
         .header-olive h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+        #oliveIcon { display: inline-block; cursor: pointer; transition: transform 0.1s; }
+        @keyframes oliveFlash {
+            0%   { transform: scale(1); }
+            25%  { transform: scale(1.4) rotate(-15deg); }
+            50%  { transform: scale(0.9) rotate(10deg); }
+            75%  { transform: scale(1.2) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .olive-flash { animation: oliveFlash 0.5s ease; }
         .header-olive p { font-size: 1rem; opacity: 0.9; }
 
         .card {
@@ -207,7 +216,7 @@
 
     <div class="content-wrapper">
         <div class="header-olive">
-            <h2>🫒 حاسبة زيت الزيتون</h2>
+            <h2><span id="oliveIcon" onclick="resetDefaults()">🫒</span> حاسبة زيت الزيتون</h2>
             <p>حساب الأوزان والأسعار بدقة</p>
         </div>
 
@@ -461,6 +470,30 @@
                 input.style.borderColor = '#e2e8f0';
                 input.style.background = '';
             }
+        }
+
+        function resetDefaults() {
+            currentDensity = DEFAULT_DENSITY;
+            tanakaSize = DEFAULT_SIZE;
+            tanakaMode = 'kg';
+            inputMode = 'ltr';
+
+            localStorage.setItem('oliveDensity', currentDensity);
+            localStorage.setItem('oliveTanakaSize', tanakaSize);
+            localStorage.setItem('oliveTanakaMode', tanakaMode);
+            localStorage.setItem('oliveInputMode', inputMode);
+
+            document.getElementById('densityValue').innerText = currentDensity;
+            updateInputLabels();
+            updateTanakaLabel();
+            calculate();
+
+            // وميض الأيقونة
+            const icon = document.getElementById('oliveIcon');
+            icon.classList.remove('olive-flash');
+            void icon.offsetWidth; // إعادة تشغيل الأنيميشن
+            icon.classList.add('olive-flash');
+            icon.addEventListener('animationend', () => icon.classList.remove('olive-flash'), { once: true });
         }
 
         function calculate() {
