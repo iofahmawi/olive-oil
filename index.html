@@ -385,7 +385,7 @@
             clearTimeout(pressTimer);
             const modalInput = document.getElementById('newSizeInput');
             modalInput.value = tanakaSize;
-            document.getElementById('sizeModalTitle').innerText = (tanakaMode === 'kg') ? "تعديل الوزن (كيلو)" : "تعديل السعة (لتر)";
+            document.getElementById('sizeModalTitle').innerText = (tanakaMode === 'kg') ? "تعديل الوزن" : "تعديل السعة";
             document.getElementById('sizeModal').style.display = 'flex';
             setTimeout(() => { modalInput.focus(); modalInput.select(); }, 100);
         }
