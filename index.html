@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>حاسبة زيت الزيتون</title>
 
-    <meta name="theme-color" content="#606c38">
+    <meta name="theme-color" content="#f8fafc">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-1024.png">
     <link rel="apple-touch-icon" href="icon-1024.png">
@@ -44,45 +44,33 @@
 
         .content-wrapper { flex-grow: 1; display: flex; flex-direction: column; }
 
-        .header-olive {
+        .header-card {
             background-color: var(--primary);
-            color: var(--white);
-            padding: 30px 25px 60px; 
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px -2px rgba(96,108,56,0.18);
+            padding: 19px 20px 9px;
+            width: 92%;
+            max-width: 350px;
+            margin: 20px auto 0;
             text-align: center;
-            border-bottom-left-radius: 35px;
-            border-bottom-right-radius: 35px;
-            position: relative;
-        }
-
-        .header-olive::before {
-            content: "";
-            position: absolute;
-            top: -100px; 
-            left: 0;
-            right: 0;
-            height: 100px;
-            background-color: var(--primary);
-            z-index: -1;
         }
 
         @media (display-mode: standalone), (display-mode: fullscreen) {
-            .header-olive {
-                padding-top: calc(1.10cm + env(safe-area-inset-top, 0px));
-                padding-bottom: 80px; 
-            }
+            .header-card { padding-top: 21px; padding-bottom: 11px; }
         }
 
-        .header-olive h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
-        #oliveIcon { display: inline-block; cursor: pointer; transition: transform 0.1s; }
-        @keyframes oliveFlash {
-            0%   { transform: scale(1); }
-            25%  { transform: scale(1.4) rotate(-15deg); }
-            50%  { transform: scale(0.9) rotate(10deg); }
-            75%  { transform: scale(1.2) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
+        .app-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 4px;
         }
-        .olive-flash { animation: oliveFlash 0.5s ease; }
-        .header-olive p { font-size: 1rem; opacity: 0.9; }
+
+        .app-subtitle {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
+        }
 
         .card {
             background-color: var(--white);
@@ -91,7 +79,7 @@
             padding: 23px; 
             width: 92%;
             max-width: 350px;
-            margin: -35px auto 5px; 
+            margin: 14px auto 5px; 
             position: relative;
             z-index: 10;
         }
@@ -215,9 +203,9 @@
 <body onclick="document.activeElement.blur()">
 
     <div class="content-wrapper">
-        <div class="header-olive">
-            <h2><span id="oliveIcon" onclick="resetDefaults()">🫒</span> حاسبة زيت الزيتون</h2>
-            <p>حساب الأوزان والأسعار بدقة</p>
+        <div class="header-card">
+            <h2 class="app-title"><span id="oliveIcon" onclick="resetDefaults()">🫒</span> حاسبة زيت الزيتون</h2>
+            <p class="app-subtitle">حساب الأوزان والأسعار بدقة</p>
         </div>
 
         <div class="card" onclick="event.stopPropagation()">
