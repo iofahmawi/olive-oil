@@ -4,8 +4,8 @@
   "description": "تطبيق لحساب أوزان وأسعار زيت الزيتون بدقة",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#606c38",
+  "background_color": "#ffffff",
+  "theme_color": "#f8fafc",
   "orientation": "portrait",
   "icons": [
     {
