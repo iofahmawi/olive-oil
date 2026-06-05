@@ -110,7 +110,7 @@
             width: 100%;
             height: var(--standard-height);
             padding: 0 10px; 
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid #e4ecf3;
             border-radius: 10px;
             font-size: 1.05rem;
             font-weight: 700;
@@ -126,15 +126,14 @@
             margin-top: 20px; 
             background: var(--white);
             border-radius: 12px;
-            padding: 10px 15px; 
-            border: 1.5px solid #f1f5f9;
+            padding: 4px 20px; 
         }
 
         .result-row { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 6px 0; 
+            padding: 8px 0; 
             font-size: 0.95rem; 
         }
 
@@ -171,7 +170,7 @@
         .modal-input {
             width: 100%;
             height: 45px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #edf2f7;
             border-radius: 10px;
             text-align: center;
             font-size: 1.2rem;
@@ -192,7 +191,7 @@
         }
 
         .btn-save { background: var(--primary); color: white; }
-        .btn-cancel { background: #f1f5f9; color: #64748b; }
+        .btn-cancel { background: #edf2f7; color: #64748b; }
 
         .simple-footer { 
             text-align: center; font-size: 0.9rem; 
@@ -234,13 +233,11 @@
                     <span class="result-label">كثافة الزيت:</span>
                     <span class="result-value" id="densityValue">0.916</span>
                 </div>
-                <div class="divider"></div>
 
                 <div class="result-row">
                     <span class="result-label" id="altResultLabel">الوزن بالكيلو:</span>
                     <span class="result-value" id="altResultValue">0.00</span>
                 </div>
-                <div class="divider"></div>
 
                 <div class="result-row">
                     <span class="result-label">سعر اللتر الواحد:</span>
@@ -250,7 +247,6 @@
                     <span class="result-label">سعر الكيلو الواحد:</span>
                     <span class="result-value" id="pricePerKg">0.00</span>
                 </div>
-                <div class="divider"></div>
 
                 <div class="result-row no-select" style="cursor: pointer;" id="tanakaRow">
                     <span class="result-label" id="tanakaLabel">سعر تنكة 16 كيلو:</span>
@@ -412,7 +408,7 @@
                 input.style.borderColor = '#e53e3e';
                 input.style.background = '#fff5f5';
             } else {
-                input.style.borderColor = '#e2e8f0';
+                input.style.borderColor = '#e4ecf3';
                 input.style.background = '';
             }
         }
@@ -465,7 +461,7 @@
                 input.style.borderColor = '#e53e3e';
                 input.style.background = '#fff5f5';
             } else {
-                input.style.borderColor = '#e2e8f0';
+                input.style.borderColor = '#e4ecf3';
                 input.style.background = '';
             }
         }
