@@ -19,7 +19,7 @@
             --text-main: #283618;
             --text-muted: #606c38;
             --radius: 16px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.10);
             --standard-height: 40px;
         }
 
@@ -46,7 +46,7 @@
 
         .header-card {
             background-color: var(--primary);
-            border-radius: var(--radius);
+            border-radius: var(--radius) var(--radius) 0 0;
             box-shadow: 0 4px 12px -2px rgba(96,108,56,0.18);
             padding: 19px 20px 9px;
             width: 92%;
@@ -56,7 +56,7 @@
         }
 
         @media (display-mode: standalone), (display-mode: fullscreen) {
-            .header-card { padding-top: 21px; padding-bottom: 11px; }
+            .header-card { padding-top: 21px; padding-bottom: 9px; }
         }
 
         #oliveIcon { display: inline-block; cursor: pointer; transition: transform 0.1s; }
@@ -84,12 +84,12 @@
 
         .card {
             background-color: var(--white);
-            border-radius: var(--radius);
+            border-radius: 0 0 var(--radius) var(--radius);
             box-shadow: var(--shadow);
             padding: 23px; 
             width: 92%;
             max-width: 350px;
-            margin: 17px auto 5px; 
+            margin: 0 auto 5px; 
             position: relative;
             z-index: 10;
         }
