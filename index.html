@@ -152,8 +152,7 @@
             background: rgba(0,0,0,0.4);
             display: none; 
             justify-content: center;
-            align-items: flex-start;
-            padding-top: 15vh;
+            align-items: center;
             z-index: 1000;
             backdrop-filter: blur(3px);
         }
@@ -336,11 +335,7 @@
         tanakaRow.addEventListener('touchend', cancelPress);
         tanakaRow.addEventListener('click', function() { toggleTanakaUnit(); });
 
-        densityRow.addEventListener('mousedown', e => startPress(e, 'density'));
-        densityRow.addEventListener('touchstart', e => startPress(e, 'density'));
-        densityRow.addEventListener('mouseup', cancelPress);
-        densityRow.addEventListener('mouseleave', cancelPress);
-        densityRow.addEventListener('touchend', cancelPress);
+        densityRow.addEventListener('click', openModal);
 
         function startPress(e, target) {
             pressTarget = target;
@@ -415,7 +410,8 @@
             document.getElementById('kgCalcInput').value = '';
             document.getElementById('kgCalcResult').innerText = '0.00';
             document.getElementById('kgCalcModal').style.display = 'flex';
-            setTimeout(() => document.getElementById('kgCalcInput').focus(), 100);
+            positionModals();
+            setTimeout(() => { document.getElementById('kgCalcInput').focus(); positionModals(); }, 300);
         }
 
         function calcKgResult() {
@@ -440,7 +436,8 @@
             document.getElementById('literCalcInput').value = '';
             document.getElementById('literCalcResult').innerText = '0.00';
             document.getElementById('literCalcModal').style.display = 'flex';
-            setTimeout(() => document.getElementById('literCalcInput').focus(), 100);
+            positionModals();
+            setTimeout(() => { document.getElementById('literCalcInput').focus(); positionModals(); }, 300);
         }
 
         function calcLiterResult() {
@@ -462,7 +459,8 @@
             const modalInput = document.getElementById('newDensityInput');
             modalInput.value = currentDensity;
             document.getElementById('densityModal').style.display = 'flex';
-            setTimeout(() => { modalInput.focus(); }, 100);
+            positionModals();
+            setTimeout(() => { modalInput.focus(); positionModals(); }, 300);
         }
 
         function openSizeModal() {
@@ -471,7 +469,29 @@
             modalInput.value = tanakaSize;
             document.getElementById('sizeModalTitle').innerText = (tanakaMode === 'kg') ? "تعديل الوزن" : "تعديل السعة";
             document.getElementById('sizeModal').style.display = 'flex';
-            setTimeout(() => { modalInput.focus(); }, 100);
+            positionModals();
+            setTimeout(() => { modalInput.focus(); positionModals(); }, 300);
+        }
+
+        function positionModals() {
+            const vv = window.visualViewport;
+            const overlays = document.querySelectorAll('.modal-overlay');
+            overlays.forEach(overlay => {
+                if (overlay.style.display !== 'flex') return;
+                if (vv) {
+                    // المنطقة المرئية فوق الكيبورد
+                    overlay.style.top = vv.offsetTop + 'px';
+                    overlay.style.height = vv.height + 'px';
+                } else {
+                    overlay.style.top = '';
+                    overlay.style.height = '100%';
+                }
+            });
+        }
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', positionModals);
+            window.visualViewport.addEventListener('scroll', positionModals);
         }
 
         function closeModal() { 
