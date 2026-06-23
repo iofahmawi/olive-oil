@@ -240,12 +240,12 @@
                     <span class="result-value" id="altResultValue">0.00</span>
                 </div>
                 <div class="divider"></div>
-                <div class="result-row">
+                <div class="result-row no-select" style="cursor: pointer;" id="pricePerLiterRow" onclick="openLiterCalcModal()">
                     <span class="result-label">سعر اللتر الواحد:</span>
                     <span class="result-value" id="pricePerLiter">0.00</span>
                 </div>
                 <div class="divider"></div>
-                <div class="result-row">
+                <div class="result-row no-select" style="cursor: pointer;" id="pricePerKgRow" onclick="openKgCalcModal()">
                     <span class="result-label">سعر الكيلو الواحد:</span>
                     <span class="result-value" id="pricePerKg">0.00</span>
                 </div>
@@ -255,6 +255,35 @@
                     <span class="result-value highlight" id="tanakaValue">0.00</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="kgCalcModal" onclick="closeKgCalcModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 style="margin-bottom: 6px; color: var(--primary);">حساب سعر الكمية</h3>
+            <p style="font-size:0.85rem; color:#888; margin-bottom:14px;">سعر الكيلو: <span id="modalKgPrice" style="color:var(--primary);font-weight:700;">0.00</span></p>
+            <input type="number" inputmode="decimal" id="kgCalcInput" class="modal-input" placeholder="عدد الكيلوات" oninput="calcKgResult()" onkeydown="if(event.key==='Enter')closeKgCalcModal()" step="any" min="0" style="font-size:1.05rem; font-weight:700; color:var(--primary);">
+            <style>#kgCalcInput::placeholder { color: #ccc; }</style>
+            <div style="background:#f8fafc; border-radius:10px; padding:12px; margin-bottom:16px;">
+                <div style="font-size:0.85rem; color:#888; margin-bottom:4px;">السعر الإجمالي</div>
+                <div id="kgCalcResult" style="font-size:1.6rem; font-weight:800; color:var(--accent-gold);">0.00</div>
+            </div>
+            <button class="btn btn-save" style="width:100%;" onclick="closeKgCalcModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="literCalcModal" onclick="closeLiterCalcModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 style="margin-bottom: 6px; color: var(--primary);">حساب سعر الكمية</h3>
+            <p style="font-size:0.85rem; color:#888; margin-bottom:14px;">سعر اللتر: <span id="modalLiterPrice" style="color:var(--primary);font-weight:700;">0.00</span></p>
+            <input type="number" inputmode="decimal" id="literCalcInput" class="modal-input" placeholder="عدد اللترات" oninput="calcLiterResult()" onkeydown="if(event.key==='Enter')closeLiterCalcModal()" step="any" min="0" style="font-size:1.05rem; font-weight:700; color:var(--primary);">
+            <style>#literCalcInput::placeholder { color: #ccc; }</style>
+            <div style="background:#f8fafc; border-radius:10px; padding:12px; margin-bottom:16px;">
+                <div style="font-size:0.85rem; color:#888; margin-bottom:4px;">السعر الإجمالي</div>
+                <div id="literCalcResult" style="font-size:1.6rem; font-weight:800; color:var(--accent-gold);">0.00</div>
+
+            </div>
+            <button class="btn btn-save" style="width:100%;" onclick="closeLiterCalcModal()">إغلاق</button>
         </div>
     </div>
 
@@ -379,6 +408,56 @@
             document.getElementById('tanakaLabel').innerText = `سعر تنكة ${tanakaSize} ${unitText}:`;
         }
 
+        function openKgCalcModal() {
+            const pKg = parseFloat(document.getElementById('pricePerKg').innerText);
+            if (!pKg || pKg === 0) return;
+            document.getElementById('modalKgPrice').innerText = pKg.toFixed(2);
+            document.getElementById('kgCalcInput').value = '';
+            document.getElementById('kgCalcResult').innerText = '0.00';
+            document.getElementById('kgCalcModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('kgCalcInput').focus(), 100);
+        }
+
+        function calcKgResult() {
+            const pKg = parseFloat(document.getElementById('modalKgPrice').innerText);
+            const qty = parseFloat(document.getElementById('kgCalcInput').value);
+            if (!isNaN(qty) && qty > 0 && pKg > 0) {
+                document.getElementById('kgCalcResult').innerText = (pKg * qty).toFixed(2);
+            } else {
+                document.getElementById('kgCalcResult').innerText = '0.00';
+            }
+        }
+
+        function closeKgCalcModal() {
+            document.getElementById('kgCalcModal').style.display = 'none';
+            document.getElementById('kgCalcInput').value = '';
+        }
+
+        function openLiterCalcModal() {
+            const pLtr = parseFloat(document.getElementById('pricePerLiter').innerText);
+            if (!pLtr || pLtr === 0) return;
+            document.getElementById('modalLiterPrice').innerText = pLtr.toFixed(2);
+            document.getElementById('literCalcInput').value = '';
+            document.getElementById('literCalcResult').innerText = '0.00';
+            document.getElementById('literCalcModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('literCalcInput').focus(), 100);
+        }
+
+        function calcLiterResult() {
+            const pLtr = parseFloat(document.getElementById('modalLiterPrice').innerText);
+            const qty = parseFloat(document.getElementById('literCalcInput').value);
+            if (!isNaN(qty) && qty > 0 && pLtr > 0) {
+                document.getElementById('literCalcResult').innerText = (pLtr * qty).toFixed(2);
+            } else {
+                document.getElementById('literCalcResult').innerText = '0.00';
+            }
+        }
+
+        function closeLiterCalcModal() {
+            document.getElementById('literCalcModal').style.display = 'none';
+            document.getElementById('literCalcInput').value = '';
+        }
+
         function openModal() {
             const modalInput = document.getElementById('newDensityInput');
             modalInput.value = currentDensity;
@@ -398,6 +477,7 @@
         function closeModal() { 
             document.getElementById('densityModal').style.display = 'none'; 
             document.getElementById('sizeModal').style.display = 'none';
+            document.getElementById('literCalcModal').style.display = 'none';
             const di = document.getElementById('newDensityInput');
             di.style.borderColor = ''; di.style.background = '';
             const si = document.getElementById('newSizeInput');
